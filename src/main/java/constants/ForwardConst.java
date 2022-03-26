@@ -1,10 +1,12 @@
 package constants;
+
 /**
  * リクエストパラメーターの変数名、変数値、jspファイルの名前等画面遷移に関わる値を定義するEnumクラス
  *
  */
-public class ForwardConst {
-  //action
+public enum ForwardConst {
+
+    //action
     ACT("action"),
     ACT_TOP("Top"),
     ACT_EMP("Employee"),
@@ -57,5 +59,4 @@ public class ForwardConst {
         return this.text;
     }
 
-}
 }

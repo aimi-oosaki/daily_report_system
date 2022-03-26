@@ -1,9 +1,11 @@
 package constants;
+
 /**
  * アプリケーションスコープのパラメータ名を定義するEnumクラス
  *
  */
-public class PropertyConst {
+public enum PropertyConst {
+
     //ペッパー文字列
     PEPPER("pepper");
 

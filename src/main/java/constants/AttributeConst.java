@@ -1,9 +1,11 @@
 package constants;
+
 /**
  * 画面の項目値等を定義するEnumクラス
  *
  */
-public class AttributeConst {
+public enum AttributeConst {
+
     //フラッシュメッセージ
     FLUSH("flush"),
 
@@ -61,11 +63,11 @@ public class AttributeConst {
         this.i = i;
     }
 
-    private String getValur() {
+    public String getValue() {
         return this.text;
     }
 
-    private Integer getIntegerValue() {
+    public Integer getIntegerValue() {
         return this.i;
     }
 
