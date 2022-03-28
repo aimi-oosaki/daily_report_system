@@ -4,14 +4,14 @@
 <%@ page import="constants.ForwardConst" %>
 
 <c:set var="action" value="${ForwardConst.ACT_EMP.getValue()}" />
-<c:set vaer="commIdx" value="${ForwardConst.CMD_INDEX.getValue()}" />
+<c:set var="commIdx" value="${ForwardConst.CMD_INDEX.getValue()}" />
 
 <c:if test="${errors != null}">
     <div id="flash_error">
         入力内容にエラーがあります。<br />
-        <c:foreach var="error" items="${errors}">
+        <c:forEach var="error" items="${errors}">
             ・<c:out value="${error}" /><br />
-        </c:foreach>
+        </c:forEach>
     </div>
 </c:if>
 <label for="${AttributeConst.EMP_CODE.getValue()}">社員番号</label><br />
