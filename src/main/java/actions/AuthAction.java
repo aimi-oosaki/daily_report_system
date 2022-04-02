@@ -76,7 +76,7 @@ public class AuthAction extends ActionBase {
 
                 //ログインした従業員のDBデータを取得
                 EmployeeView ev = service.findOne(code, plainPass, pepper);
-                //セッションにログインした従業員を設定
+                //セッションにログインした従業員を設定3t
                 putSessionScope(AttributeConst.LOGIN_EMP, ev);
                 //セッションにログイン完了のフラッシュメッセージを設定
                 putSessionScope(AttributeConst.FLUSH, MessageConst.I_LOGINED.getMessage());
