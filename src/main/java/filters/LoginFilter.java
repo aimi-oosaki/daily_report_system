@@ -21,27 +21,26 @@ import constants.ForwardConst;
 /**
  * Servlet Filter implementation class LoginFilter
  */
-@WebFilter(asyncSupported = true, urlPatterns = { "/*" })
+@WebFilter("/*")
 public class LoginFilter implements Filter {
 
     /**
      * Default constructor.
      */
     public LoginFilter() {
-        // TODO Auto-generated constructor stub
     }
 
     /**
      * @see Filter#destroy()
      */
     public void destroy() {
-        // TODO Auto-generated method stub
     }
 
     /**
      * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
      */
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+            throws IOException, ServletException {
         String contextPath = ((HttpServletRequest) request).getContextPath();
         String servletPath = ((HttpServletRequest) request).getServletPath();
 
@@ -102,17 +101,16 @@ public class LoginFilter implements Filter {
                     }
                 }
             }
-        }
 
-        //次のフィルタまたはサーブレットを呼び出し
-        chain.doFilter(request, response);
+            //次のフィルタまたはサーブレットを呼び出し
+            chain.doFilter(request, response);
+        }
     }
 
     /**
      * @see Filter#init(FilterConfig)
      */
     public void init(FilterConfig fConfig) throws ServletException {
-        // TODO Auto-generated method stub
     }
 
 }

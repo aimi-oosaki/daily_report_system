@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-body{
+body {
     color: #333333;
     font-family: "Hiragino Kaku Gothic Pro",Meiryo,"MS PGothic",Helvetica,Arial,sans-serif;
 }
@@ -11,9 +11,18 @@ body{
     background-color: #333333;
 }
 
+#content {
+    width: 94%;
+    margin-top: 15px;
+    padding-left: 94%;
+}
+
 h1 {
+    width: 94%;
+    padding-top: 17px;
+    padding-left: 3%;
     font-size: 24px;
-    display: inline;
+    color: #eeeeee;
 }
 
 h2 {
@@ -63,6 +72,7 @@ button {
 #footer {
     text-align: center;
 }
+
 
 #flush_success {
     width: 100%;
