@@ -21,12 +21,19 @@
                 <tr>
                     <th>社員番号</th>
                     <th>氏名</th>
+                    <th>役職</th>
                     <th>操作</th>
                 </tr>
                 <c:forEach var="employee" items="${employees}" varStatus="status">
                     <tr class="row${status.count % 2}">
                         <td><c:out value="${employee.code}" /></td>
                         <td><c:out value="${employee.name}" /></td>
+                        <td><c:choose>
+                            <c:when test="${employee.positionFlag == AttributeConst.ROLE_MANEGER.getIntegerValue()}">
+                                管理職
+                            </c:when>
+                            <c:otherwise>一般社員</c:otherwise>
+                        </c:choose></td>
                         <td>
                             <c:choose>
                                 <c:when test="${employee.deleteFlag == AttributeConst.DEL_FLAG_TRUE.getIntegerValue()}">

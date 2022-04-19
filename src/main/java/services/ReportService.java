@@ -145,7 +145,7 @@ public class ReportService extends ServiceBase {
      * 日報データを更新する
      * @param rv 日報データ
      */
-    private void updateInternal(ReportView rv) {
+    public void updateInternal(ReportView rv) {
 
         em.getTransaction().begin();
         Report r = findOneInternal(rv.getId());
@@ -153,5 +153,4 @@ public class ReportService extends ServiceBase {
         em.getTransaction().commit();
 
     }
-
 }

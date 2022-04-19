@@ -3,6 +3,8 @@ package actions.views;
 import java.util.ArrayList;
 import java.util.List;
 
+import constants.AttributeConst;
+import constants.JpaConst;
 import models.Report;
 
 /**
@@ -10,6 +12,7 @@ import models.Report;
  *
  */
 public class ReportConverter {
+
     /**
      * ViewモデルのインスタンスからDTOモデルのインスタンスを作成する
      * @param rv ReportViewのインスタンス
@@ -23,7 +26,12 @@ public class ReportConverter {
                 rv.getTitle(),
                 rv.getContent(),
                 rv.getCreatedAt(),
-                rv.getUpdatedAt());
+                rv.getUpdatedAt(),
+                rv.getCheckedFlag() == null
+                ? null
+                : rv.getCheckedFlag() == AttributeConst.CHECKED_FLAG_TRUE.getIntegerValue()
+                        ? JpaConst.REP_CHECKED_TRUE
+                        : JpaConst.REP_CHECKED_FALSE);
     }
 
     /**
@@ -32,7 +40,8 @@ public class ReportConverter {
      * @return ReportViewのインスタンス
      */
     public static ReportView toView(Report r) {
-        if(r == null) {
+
+        if (r == null) {
             return null;
         }
 
@@ -43,7 +52,12 @@ public class ReportConverter {
                 r.getTitle(),
                 r.getContent(),
                 r.getCreatedAt(),
-                r.getUpdatedAt());
+                r.getUpdatedAt(),
+                r.getCheckedFlag() == null
+                ? null
+                : r.getCheckedFlag() == JpaConst.REP_CHECKED_TRUE
+                        ? AttributeConst.CHECKED_FLAG_TRUE.getIntegerValue()
+                        : AttributeConst.CHECKED_FLAG_FALSE.getIntegerValue());
     }
 
     /**
@@ -54,7 +68,7 @@ public class ReportConverter {
     public static List<ReportView> toViewList(List<Report> list) {
         List<ReportView> evs = new ArrayList<>();
 
-        for(Report r : list) {
+        for (Report r : list) {
             evs.add(toView(r));
         }
 
@@ -74,6 +88,7 @@ public class ReportConverter {
         r.setContent(rv.getContent());
         r.setCreatedAt(rv.getCreatedAt());
         r.setUpdatedAt(rv.getUpdatedAt());
-
+        r.setCheckedFlag(rv.getCheckedFlag());
     }
+
 }

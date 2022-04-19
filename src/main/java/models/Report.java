@@ -92,5 +92,11 @@ public class Report{
      */
     @Column(name = JpaConst.REP_COL_UPDATED_AT, nullable = false)
     private LocalDateTime updatedAt;
+    
+    /**
+     * 承認済みかどうか
+     */
+    @Column(name = JpaConst.REP_COL_CHECKED_FLAG, nullable = false)
+    private Integer checkedFlag;
 }
 

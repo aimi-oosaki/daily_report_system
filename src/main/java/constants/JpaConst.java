@@ -23,11 +23,15 @@ public interface JpaConst {
     String EMP_COL_CREATED_AT = "created_at"; //登録日時
     String EMP_COL_UPDATED_AT = "updated_at"; //更新日時
     String EMP_COL_DELETE_FLAG = "delete_flag"; //削除フラグ
+    String EMP_COL_POSITION_FLAG = "position_flag"; //上長★追加
 
     int ROLE_ADMIN = 1; //管理者権限ON(管理者)
     int ROLE_GENERAL = 0; //管理者権限OFF(一般)
+    int ROLE_MANEGER = 1; //管理者権限ON(管理者)★追加
+    int ROLE_MEMBER = 0; //管理者権限OFF(一般)★追加
     int EMP_DEL_TRUE = 1; //削除フラグON(削除済み)
     int EMP_DEL_FALSE = 0; //削除フラグOFF(現役)
+
 
     //日報テーブル
     String TABLE_REP = "reports"; //テーブル名
@@ -39,15 +43,29 @@ public interface JpaConst {
     String REP_COL_CONTENT = "content"; //日報の内容
     String REP_COL_CREATED_AT = "created_at"; //登録日時
     String REP_COL_UPDATED_AT = "updated_at"; //更新日時
+    String REP_COL_CHECKED_FLAG = "checked_flag"; //承認フラグ★追加
+
+    int REP_CHECKED_TRUE = 1; //日報確認フラグON(確認済み)★追加
+    int REP_CHECKED_FALSE = 0; //日報確認フラグOFF(未確認)★追加
+
+    //フォローテーブル
+    String TABLE_FOL = "follows"; //テーブル名★追加
+    //フォローテーブルカラム
+    String FOL_COL_ID = "id"; //id
+    String FOL_COL_FOLLOWING_ID = "following_id"; //フォローしている社員のID★追加
+    String FOL_COL_FOLLOWER_ID = "follower_id"; //フォローしている社員のID★追加
 
     //Entity名
     String ENTITY_EMP = "employee"; //従業員
     String ENTITY_REP = "report"; //日報
+    String ENTITY_FOL = "follow"; //フォロー★追加
 
     //JPQL内パラメータ
     String JPQL_PARM_CODE = "code"; //社員番号
     String JPQL_PARM_PASSWORD = "password"; //パスワード
     String JPQL_PARM_EMPLOYEE = "employee"; //従業員
+    String JPQL_PARM_FOLLOWING = "following"; //フォローしている
+    String JPQL_PARM_FOLLOWER = "follower"; //フォローされている
 
     //NamedQueryの nameとquery
     //全ての従業員をidの降順に取得する
@@ -75,4 +93,24 @@ public interface JpaConst {
     String Q_REP_COUNT_ALL_MINE = ENTITY_REP + ".countAllMine";
     String Q_REP_COUNT_ALL_MINE_DEF = "SELECT COUNT(r) FROM Report AS r WHERE r.employee = :" + JPQL_PARM_EMPLOYEE;
 
+    //★追記
+    //フォローしている件数を取得する
+    String Q_FOL_COUNT_FOLLOWING = ENTITY_FOL + ".countAllFllowing";
+    String Q_FOL_COUNT_FOLLOWING_DEF = "SELECT COUNT(f) FROM Follow As f WHERE f.following = :" + JPQL_PARM_FOLLOWING;
+
+    //フォロワー件数を取得する
+    String Q_FOL_COUNT_FOLLOWER = ENTITY_FOL + ".countAllFllower";
+    String Q_FOL_COUNT_FOLLOWER_DEF = "SELECT COUNT(f) FROM Follow As f WHERE f.follower = :" + JPQL_PARM_FOLLOWER;
+
+    //フォローしているすべてのユーザを取得
+    String Q_FOL_GET_ALL_FOLLOWING = ENTITY_FOL + ".getAllFollowing";
+    String Q_FOL_GET_ALL_FOLLOWING_DEF = "SELECT f FROM Follow AS f WHERE f.following = :" + JPQL_PARM_FOLLOWING;
+
+    //フォローされているすべてのユーザを取得
+    String Q_FOL_GET_ALL_FOLLOWER = ENTITY_FOL + ".getAllFollower";
+    String Q_FOL_GET_ALL_FOLLOWER_DEF = "SELECT f FROM Follow AS f WHERE f.follower = :" + JPQL_PARM_FOLLOWER;
+
+    //フォローしている・されているユーザを検索
+    String Q_FOL_GET_FOLLOWER = ENTITY_FOL + ".getFollower";
+    String Q_FOL_GET_FOLLOWER_DEF = "SELECT f FROM Follow AS f WHERE f.follower = :" + JPQL_PARM_FOLLOWER + " AND f.following = :" + JPQL_PARM_FOLLOWING;
 }

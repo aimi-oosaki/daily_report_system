@@ -36,7 +36,12 @@ public class EmployeeConverter {
                         ? null
                         : ev.getDeleteFlag() == AttributeConst.DEL_FLAG_TRUE.getIntegerValue()
                                 ? JpaConst.EMP_DEL_TRUE
-                                : JpaConst.EMP_DEL_FALSE);
+                                : JpaConst.EMP_DEL_FALSE,
+                ev.getPositionFlag() == null
+                ? null
+                : ev.getPositionFlag() == AttributeConst.ROLE_MANEGER.getIntegerValue()
+                        ? JpaConst.ROLE_MANEGER
+                        : JpaConst.ROLE_MEMBER);
     }
 
     /**
@@ -66,7 +71,12 @@ public class EmployeeConverter {
                         ? null
                         : e.getDeleteFlag() == JpaConst.EMP_DEL_TRUE
                                 ? AttributeConst.DEL_FLAG_TRUE.getIntegerValue()
-                                : AttributeConst.DEL_FLAG_FALSE.getIntegerValue());
+                                : AttributeConst.DEL_FLAG_FALSE.getIntegerValue(),
+                e.getPositionFlag() == null
+                        ? null
+                        : e.getPositionFlag() == JpaConst.ROLE_MANEGER
+                                ? AttributeConst.ROLE_MANEGER.getIntegerValue()
+                                : AttributeConst.ROLE_MEMBER.getIntegerValue());
     }
 
     /**
@@ -98,7 +108,7 @@ public class EmployeeConverter {
         e.setCreatedAt(ev.getCreatedAt());
         e.setUpdatedAt(ev.getUpdatedAt());
         e.setDeleteFlag(ev.getDeleteFlag());
-
+        e.setPositionFlag(ev.getPositionFlag());
     }
 
 }

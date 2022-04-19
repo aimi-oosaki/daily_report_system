@@ -9,6 +9,7 @@ import actions.views.EmployeeConverter;
 import actions.views.EmployeeView;
 import constants.JpaConst;
 import models.Employee;
+import models.Follow;
 import models.validators.EmployeeValidator;
 import utils.EncryptUtil;
 
@@ -156,6 +157,7 @@ public class EmployeeService extends ServiceBase {
 
         savedEmp.setName(ev.getName()); //変更後の氏名を設定する
         savedEmp.setAdminFlag(ev.getAdminFlag()); //変更後の管理者フラグを設定する
+        savedEmp.setPositionFlag(ev.getPositionFlag()); //変更後の管理職フラグを設定する
 
         //更新日時に現在時刻を設定する
         LocalDateTime today = LocalDateTime.now();
@@ -253,6 +255,25 @@ public class EmployeeService extends ServiceBase {
         EmployeeConverter.copyViewToModel(e, ev);
         em.getTransaction().commit();
 
+    }
+
+    /**★追記
+     * idを条件にフォローテーブルを検索、検索結果を返却する
+     * @param フォローしている人のid・フォローされる人のid
+     * @return 検索結果(フォローしている:true フォローしていない:false)
+     */
+    public Follow findFollow(Employee following, Employee follower) {
+        Follow follow = null;
+        try {
+            follow = em.createNamedQuery(JpaConst.Q_FOL_GET_FOLLOWER, Follow.class)
+                        .setParameter(JpaConst.JPQL_PARM_FOLLOWER, follower)
+                        .setParameter(JpaConst.JPQL_PARM_FOLLOWING, following)
+                        .getSingleResult();
+        } catch (NoResultException ex) {
+            follow = null;
+        }
+
+        return follow;
     }
 
 }

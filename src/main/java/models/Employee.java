@@ -94,6 +94,13 @@ public class Employee {
     @Column(name = JpaConst.EMP_COL_DELETE_FLAG, nullable = false)
     private Integer deleteFlag;
 
+    /**
+     * 上長かどうか（上長：1、一般社員：0）
+     */
+    @Column(name = JpaConst.EMP_COL_POSITION_FLAG, nullable = false)
+    private Integer positionFlag;
+
+
 }
 
 

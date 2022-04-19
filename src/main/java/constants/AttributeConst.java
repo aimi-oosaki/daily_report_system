@@ -32,10 +32,19 @@ public enum AttributeConst {
     EMP_PASS("password"),
     EMP_NAME("name"),
     EMP_ADMIN_FLG("admin_flag"),
+    EMP_POSITION_FLG("position_flag"),
 
     //管理者フラグ
     ROLE_ADMIN(1),
     ROLE_GENERAL(0),
+
+    //上長フラグ★追加
+    ROLE_MANEGER(1),
+    ROLE_MEMBER(0),
+
+    //確認フラグ★追加
+    CHECKED_FLAG_TRUE(1),
+    CHECKED_FLAG_FALSE(0),
 
     //削除フラグ
     DEL_FLAG_TRUE(1),
@@ -48,7 +57,21 @@ public enum AttributeConst {
     REP_ID("id"),
     REP_DATE("report_date"),
     REP_TITLE("title"),
-    REP_CONTENT("content");
+    REP_CONTENT("content"),
+    REP_CHECKED("checked"),
+
+    //フォロー管理
+    FOLLOW("follow"),
+    FOLLOWS("follows"),
+    FOL_COUNT("following_count"),
+    FOLER_COUNT("follower_count"),
+    FOLLOWINGS("followings"),
+    FOLLOWING("following"),
+    FOLLOWERS("followers"),
+    FOLLOWER("follower"),
+    UNFOLLOW("unfollow"),
+    FOLLOWED("followed");
+
 
     private final String text;
     private final Integer i;

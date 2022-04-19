@@ -7,6 +7,9 @@
 <c:set var="actEmp" value="${ForwardConst.ACT_EMP.getValue()}" />
 <c:set var="commIdx" value="${ForwardConst.CMD_INDEX.getValue()}" />
 <c:set var="commEdit" value="${ForwardConst.CMD_EDIT.getValue()}" />
+<c:set var="actFol" value="${ForwardConst.ACT_FOL.getValue()}" />  <!-- ★追記 -->
+<c:set var="commCreate" value="${ForwardConst.CMD_CREATE.getValue()}" /> <!-- ★追記 -->
+<c:set var="commDestroy" value="${ForwardConst.CMD_DESTROY.getValue()}" /> <!-- ★追記 -->
 
 <c:import url="/WEB-INF/views/layout/app.jsp">
     <c:param name="content">
@@ -28,7 +31,16 @@
                     <td><c:choose>
                             <c:when test="${employee.adminFlag == AttributeConst.ROLE_ADMIN.getIntegerValue()}">管理者</c:when>
                             <c:otherwise>一般</c:otherwise>
-                        </c:choose></td>
+                        </c:choose>
+                    </td>
+                </tr>
+                <tr>
+                    <th>役職</th>
+                    <td><c:choose>
+                            <c:when test="${employee.positionFlag == AttributeConst.ROLE_MANEGER.getIntegerValue()}">管理職</c:when>
+                            <c:otherwise>一般職</c:otherwise>
+                        </c:choose>
+                    </td>
                 </tr>
                 <tr>
                     <th>登録日時</th>
@@ -42,11 +54,29 @@
                 </tr>
             </tbody>
         </table>
-
-        <p>
-            <a href="<c:url value='?action=${actEmp}&command=${commEdit}&id=${employee.id}' />">この従業員情報を編集する</a>
-        </p>
-
+        <!-- ★追記 -->
+        <c:if test="${sessionScope.login_employee.adminFlag == AttributeConst.ROLE_ADMIN.getIntegerValue()}">
+        <!-- 管理者の場合のみ従業員情報編集を表示 -->
+            <p>
+                <a href="<c:url value='?action=${actEmp}&command=${commEdit}&id=${employee.id}' />">この従業員情報を編集する</a>
+            </p>
+        </c:if>
+            <c:choose>
+                <c:when test="${sessionScope.login_employee.id == employee.id}">
+                <!-- ログインしている本人の場合は何も表示しない -->
+                </c:when>
+                <c:when test='${follow == AttributeConst.FOLLOWED.getValue()}'>
+                <!-- フォロー済みだったらフォロー解除を表示 -->
+                    <p>
+                        <a href="<c:url value='?action=${actFol}&command=${commDestroy}&follower=${employee.id}&_token=${_token}' />">フォロー解除</a>
+                    </p>
+                </c:when>
+                <c:when test='${follow == AttributeConst.UNFOLLOW.getValue()}'>
+                <!--    未フォローだったらフォローするを表示 -->
+                      <a href="<c:url value='?action=${actFol}&command=${commCreate}&follower=${employee.id}&_token=${_token}' />">フォローする</a>
+                </c:when>
+           </c:choose>
+        <!-- ★追記ここまで -->
         <p>
             <a href="<c:url value='?action=${actEmp}&command=${commIdx}' />">一覧に戻る</a>
         </p>

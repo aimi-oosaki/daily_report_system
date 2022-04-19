@@ -5,12 +5,15 @@ import java.util.List;
 
 import javax.servlet.ServletException;
 
+import actions.views.EmployeeConverter;
 import actions.views.EmployeeView;
 import constants.AttributeConst;
 import constants.ForwardConst;
 import constants.JpaConst;
 import constants.MessageConst;
 import constants.PropertyConst;
+import models.Employee;
+import models.Follow;
 import services.EmployeeService;
 
 /**
@@ -42,7 +45,7 @@ public class EmployeeAction extends ActionBase {
      */
     public void index() throws ServletException, IOException {
       //管理者かどうかのチェック //追記
-        if (checkAdmin()) { //追記
+//        if (checkAdmin()) { //追記
             //指定されたページ数の一覧画面に表示するデータを取得
             int page = getPage();
             List<EmployeeView> employees = service.getPerPage(page);
@@ -64,7 +67,7 @@ public class EmployeeAction extends ActionBase {
 
             //一覧画面を表示
             forward(ForwardConst.FW_EMP_INDEX);
-        } //追記
+//        } //追記
 
     }
 
@@ -103,7 +106,8 @@ public class EmployeeAction extends ActionBase {
                     toNumber(getRequestParam(AttributeConst.EMP_ADMIN_FLG)),
                     null,
                     null,
-                    AttributeConst.DEL_FLAG_FALSE.getIntegerValue());
+                    AttributeConst.DEL_FLAG_FALSE.getIntegerValue(),
+                    toNumber(getRequestParam(AttributeConst.EMP_POSITION_FLG)));
 
             //アプリケーションスコープからpepper文字列を取得
             String pepper = getContextScope(PropertyConst.PEPPER);
@@ -141,9 +145,14 @@ public class EmployeeAction extends ActionBase {
      */
     public void show() throws ServletException, IOException {
         //管理者かどうかのチェック //追記
-        if (checkAdmin()) { //追記
+//        if (checkAdmin()) { //追記
             //idを条件に従業員データを取得する
             EmployeeView ev = service.findOne(toNumber(getRequestParam(AttributeConst.EMP_ID)));
+            EmployeeView ef = (EmployeeView) getSessionScope(AttributeConst.LOGIN_EMP); //★追記
+
+            //★追記--Employee型へキャスト
+            Employee evEmployee = EmployeeConverter.toModel(ev);
+            Employee efEmployee = EmployeeConverter.toModel(ef);
 
             if (ev == null || ev.getDeleteFlag() == AttributeConst.DEL_FLAG_TRUE.getIntegerValue()) {
 
@@ -153,10 +162,21 @@ public class EmployeeAction extends ActionBase {
             }
 
             putRequestScope(AttributeConst.EMPLOYEE, ev); //取得した従業員情報
+            putRequestScope(AttributeConst.TOKEN, getTokenId()); //CSRF対策用トークン★追記
+
+            //★追記--フォロー済ならfollowed・未フォローならunfollowを返す
+            Follow f = service.findFollow(efEmployee, evEmployee);
+            if(f != null) {
+                //フォロー済み
+                putRequestScope(AttributeConst.FOLLOW, AttributeConst.FOLLOWED.getValue());
+            } else {
+                //未フォロー
+                putRequestScope(AttributeConst.FOLLOW, AttributeConst.UNFOLLOW.getValue());
+            }
 
             //詳細画面を表示
             forward(ForwardConst.FW_EMP_SHOW);
-        } //追記
+//        }
     }
     /**
      * 編集画面を表示する
@@ -203,7 +223,8 @@ public class EmployeeAction extends ActionBase {
                     toNumber(getRequestParam(AttributeConst.EMP_ADMIN_FLG)),
                     null,
                     null,
-                    AttributeConst.DEL_FLAG_FALSE.getIntegerValue());
+                    AttributeConst.DEL_FLAG_FALSE.getIntegerValue(),
+                    toNumber(getRequestParam(AttributeConst.EMP_POSITION_FLG)));
 
             //アプリケーションスコープからpepper文字列を取得
             String pepper = getContextScope(PropertyConst.PEPPER);
@@ -271,6 +292,7 @@ public class EmployeeAction extends ActionBase {
              return true;
          }
      }
+
 
 
 }

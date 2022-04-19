@@ -50,6 +50,8 @@ public class ReportAction extends ActionBase{
         putRequestScope(AttributeConst.REP_COUNT, reportsCount); //全ての日報データの件数
         putRequestScope(AttributeConst.PAGE, page); //ページ数
         putRequestScope(AttributeConst.MAX_ROW, JpaConst.ROW_PER_PAGE); //1ページに表示するレコードの数
+        putRequestScope(AttributeConst.TOKEN, getTokenId()); //CSRF対策用トークン★追記
+
 
         //セッションにフラッシュメッセージが設定されている場合はリクエストスコープに移し替え、セッションからは削除する
         String flush = getSessionScope(AttributeConst.FLUSH);
@@ -109,7 +111,8 @@ public class ReportAction extends ActionBase{
                 getRequestParam(AttributeConst.REP_TITLE),
                 getRequestParam(AttributeConst.REP_CONTENT),
                 null,
-                null);
+                null,
+                toNumber(getRequestParam(AttributeConst.EMP_POSITION_FLG)));
 
         //日報情報登録
         List<String> errors = service.create(rv);
@@ -150,6 +153,7 @@ public class ReportAction extends ActionBase{
              forward(ForwardConst.FW_ERR_UNKNOWN);
          } else {
              putRequestScope(AttributeConst.REPORT, rv);
+             putRequestScope(AttributeConst.TOKEN, getTokenId()); //CSRF対策用トークン★追記
 
              //詳細画面を表示
              forward(ForwardConst.FW_REP_SHOW);
@@ -195,10 +199,10 @@ public class ReportAction extends ActionBase{
              //idを条件に日報データを取得する
              ReportView rv = service.findOne(toNumber(getRequestParam(AttributeConst.REP_ID)));
 
-             //入力された日報内容を設定する
-             rv.setReportDate(toLocalDate(getRequestParam(AttributeConst.REP_DATE)));
-             rv.setTitle(getRequestParam(AttributeConst.REP_TITLE));
-             rv.setContent(getRequestParam(AttributeConst.REP_CONTENT));
+               //入力された日報内容を設定する
+                 rv.setReportDate(toLocalDate(getRequestParam(AttributeConst.REP_DATE)));
+                 rv.setTitle(getRequestParam(AttributeConst.REP_TITLE));
+                 rv.setContent(getRequestParam(AttributeConst.REP_CONTENT));
 
              //日報データを更新する
              List<String> errors = service.update(rv);
@@ -222,6 +226,38 @@ public class ReportAction extends ActionBase{
                  redirect(ForwardConst.ACT_REP, ForwardConst.CMD_INDEX);
 
              }
+         }
+     }
+
+     // ★追記★
+     /**
+      * 承認を行う
+      * @throws ServletException
+      * @throws IOException
+      */
+     public void check() throws ServletException, IOException{
+         //CSRF対策 tokenのチェック
+         if(checkToken()) {
+             //idを条件に日報データを取得する
+             ReportView rv = service.findOne(toNumber(getRequestParam(AttributeConst.REP_ID)));
+
+             //日報を承認する
+             if (toNumber(getRequestParam(AttributeConst.REP_CHECKED)) == AttributeConst.CHECKED_FLAG_FALSE.getIntegerValue() ){
+                 rv.setCheckedFlag(AttributeConst.CHECKED_FLAG_TRUE.getIntegerValue());
+             } else {
+                 rv.setCheckedFlag(AttributeConst.CHECKED_FLAG_FALSE.getIntegerValue());
+             }
+
+             //日報データを更新する
+             service.updateInternal(rv);
+
+             //セッションに更新完了のフラッシュメッセージを設定
+             putSessionScope(AttributeConst.FLUSH, MessageConst.I_UPDATED.getMessage());
+
+             //一覧画面にリダイレクト
+             redirect(ForwardConst.ACT_REP, ForwardConst.CMD_INDEX);
+
+
          }
      }
 }

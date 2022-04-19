@@ -56,4 +56,9 @@ public class EmployeeView {
      */
     private Integer deleteFlag;
 
+    /**
+     * 上長権限があるかどうか（一般：0、管理者：1）
+     */
+    private Integer positionFlag;
+
 }
